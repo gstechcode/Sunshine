@@ -1,17 +1,18 @@
 from tkinter import *
+from tkinter import messagebox
 from tkinter.ttk import Progressbar
 import os, shutil
 from zipfile import ZipFile
 from urllib import request
 from tqdm import tqdm
-import time
+import time, os, bs4, urllib, subprocess
 
 class UpdateSun:
-    def __init__(self):
+    def __init__(self, title):
         self.display= Tk()
         self.debug= 1
         self.display.geometry("500x500")
-        self.display.title("Sunshine Instalador")
+        self.display.title(title)
         self.display.config(bg="orange",padx="30px", pady="30px")
         self.label0= Label(self.display, text=f"Olá {os.getlogin()}", bg="orange", fg="white", font="Arial 21 bold")
         self.label0.pack(pady="20px")
@@ -69,4 +70,29 @@ class UpdateSun:
         self.display.update()
         self.display.destroy()
 
-x= UpdateSun()
+class Verify:
+    def __init__(self):
+        if(not(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine"))):
+            x= UpdateSun("Sunshine Instalador")
+        self.__dep__()
+        if(self.localVersion != self.remoteVersion):
+            self.update()
+        else:
+            subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)
+    def update(self):
+        option= messagebox.askyesno("Sunshine- Nova versão disponível do aplicativo","Deseja atualizar agora?")
+        if(option):
+            x= UpdateSun("Atualizador do Sunshine")
+        subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)
+    def __dep__(self):
+       localVersion= open(os.environ["USERPROFILE"] + "\\Sunshine\\.version", "r")
+       self.localVersion= str(float(localVersion.readlines()[0]))
+       fp = urllib.request.urlopen("https://github.com/gstechcode/Sunshine/tree/aplicativo")
+       mybytes = fp.read()
+       mystr = mybytes.decode("utf8")
+       fp.close()
+       page= bs4.BeautifulSoup(mystr,"html.parser")
+       self.remoteVersion= page.find(id="user-content-VERSAOAPP")
+       self.remoteVersion= str(float(self.remoteVersion.contents[0]))
+
+y= Verify()

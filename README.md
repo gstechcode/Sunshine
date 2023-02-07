@@ -24,4 +24,6 @@
 
 <h1>Versão atual:</h1>
 
-<h3 id="versaoaplicativo">1.0</h3>
+<div>
+  <h3 id="versaoaplicativo">1.0</h3>
+</div>

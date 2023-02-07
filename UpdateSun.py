@@ -5,7 +5,9 @@ import os, shutil
 from zipfile import ZipFile
 from urllib import request
 from tqdm import tqdm
-import time, os, bs4, urllib, subprocess
+import time, os, bs4, urllib, subprocess, socket
+
+socket.setdefaulttimeout(10)
 
 class UpdateSun:
     def __init__(self, title):
@@ -30,7 +32,7 @@ class UpdateSun:
     def download(self):
         self.label["text"]= "Fazendo download..."
         while self.debug:
-            x= request.urlretrieve("https://github.com/gstechcode/Sunshine/archive/refs/heads/aplicativo.zip",f"{os.environ['USERPROFILE']}/Downloads/Sunshine.zip", self.Ldownload) 
+            x= request.urlretrieve("https://github.com/gstechcode/Sunshine/archive/refs/heads/aplicativo.zip",f"{os.environ['USERPROFILE']}/Downloads/Sunshine.zip", self.Ldownload)
     def Ldownload(self, blocknum, blocksize, totalsize):
         self.display.update()
         if(totalsize == -1):
@@ -95,4 +97,9 @@ class Verify:
        self.remoteVersion= page.find(id="user-content-VERSAOAPP")
        self.remoteVersion= str(float(self.remoteVersion.contents[0]))
 
-y= Verify()
+try:
+    y= Verify()
+except urllib.error.URLError:
+    messagebox.showerror("Computador desconectado","Seu computador está desconectado da rede, conecte-se primeiro.")
+except TimeoutError:
+    messagebox.showerror("Computador desconectado","Ocorreu uma perda de conexão, por favor tente novamente.")

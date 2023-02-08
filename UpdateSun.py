@@ -5,7 +5,7 @@ import os, shutil
 from zipfile import ZipFile
 from urllib import request
 from tqdm import tqdm
-import time, os, bs4, urllib, subprocess, socket
+import time, os, bs4, urllib, subprocess, socket, http
 
 socket.setdefaulttimeout(10)
 
@@ -30,12 +30,14 @@ class UpdateSun:
         self.removeDir()
         self.display.mainloop()
     def download(self):
-        self.label["text"]= "Fazendo download..."
+        self.label["text"]= "Analisando arquivo..."
         while self.debug:
             x= request.urlretrieve("https://github.com/gstechcode/Sunshine/archive/refs/heads/aplicativo.zip",f"{os.environ['USERPROFILE']}/Downloads/Sunshine.zip", self.Ldownload)
     def Ldownload(self, blocknum, blocksize, totalsize):
+        self.label["text"]= "Baixando arquivo..."
         self.display.update()
         if(totalsize == -1):
+            print("negativo")
             self.debug= 1
             return 0
         pcent= (blocknum*blocksize/totalsize) * 100
@@ -100,6 +102,20 @@ class Verify:
 try:
     y= Verify()
 except urllib.error.URLError:
-    messagebox.showerror("Computador desconectado","Seu computador está desconectado da rede, conecte-se primeiro.")
+    messagebox.showerror("Computador desconectado","Seu computador está desconectado da rede, conecte-se primeiro para atualizar ou baixar o aplicativo.")
+    if(os.path.exists(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")):
+        os.remove(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")
 except TimeoutError:
     messagebox.showerror("Computador desconectado","Ocorreu uma perda de conexão, por favor tente novamente.")
+    if(os.path.exists(
+        os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")):
+        os.remove(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")
+except http.client.IncompleteRead:
+    messagebox.showerror("Computador desconectado","Ocorreu uma perda de conexão, por favor tente novamente.")
+    if(os.path.exists(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")):
+        os.remove(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")
+except TclError:
+    pass
+
+if(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine\\Sunshine.exe")):
+    subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)

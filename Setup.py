@@ -5,8 +5,8 @@ import os
 
 # Dependencies are automatically detected, but it might need fine tuning.
 # "packages": ["os"] is used as example only
-build_exe_options = {"packages": ["os","tqdm","tkinter","time","zipfile","urllib","shutil","bs4","subprocess","socket"]}
-build_dist_options= {"all_users": True, "target_name": "Sunshine_Update.msi"}
+build_exe_options = {"packages": ["os","tqdm","tkinter","time","zipfile","urllib","shutil","bs4","subprocess","socket","http"]}
+build_dist_options= {"all_users": True, "target_name": "Sunshine_Update"}
 # base="Win32GUI" should be used only for Windows GUI app
 base = None
 if sys.platform == "win32":

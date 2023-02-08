@@ -438,7 +438,7 @@ class Ui_MainWindow(object):
         item.setStyleSheet("border: 1px solid orange; background-color: white; border-radius: 10px")
     def formend(self):
         self.db= {}
-        self.file= open(os.environ["USERPROFILE"] + "\\Documents\\Sunshine\\Cache\\FormMain.cache","w")
+        self.file= open(os.environ["USERPROFILE"] + "\\Sunshine\\Cache\\FormMain.cache","w")
         if(self.diagnostico.isChecked() == True):
             self.Diagnostico()
         else:
@@ -456,7 +456,7 @@ class Ui_MainWindow(object):
         self.janela.close()
     def formant(self):
         print("EVOU EXECUTAR")
-        self.file= open(os.environ["USERPROFILE"] + "\\Documents\\Sunshine\\Cache\\FormMain.cache","r")
+        self.file= open(os.environ["USERPROFILE"] + "\\Sunshine\\Cache\\FormMain.cache","r")
         file= self.file.readlines()[0]
         self.db= json.loads(file)
         self.db["relatorios1214"]= self.relatorios1214.isChecked()
@@ -466,7 +466,7 @@ class Ui_MainWindow(object):
         self.db["otimizargifs"]= self.otimizargifs.isChecked()
         self.db["otimizarstls"]= self.otimizarstls.isChecked()
         self.file.close()
-        self.file= open(os.environ["USERPROFILE"] + "\\Documents\\Sunshine\\Cache\\FormMain.cache","w")
+        self.file= open(os.environ["USERPROFILE"] + "\\Sunshine\\Cache\\FormMain.cache","w")
         file= json.dumps(self.db)
         self.file.write(file)
         self.file.close()

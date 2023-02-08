@@ -6,6 +6,8 @@ from zipfile import ZipFile
 from urllib import request
 from tqdm import tqdm
 import time, os, bs4, urllib, subprocess, socket, http
+VERIFYFAILED = 0 #variavel de identificação de quebra de aplicação
+END= 0 # variavel de identificação da execução SUNSHINE
 
 socket.setdefaulttimeout(10)
 
@@ -76,13 +78,20 @@ class UpdateSun:
 
 class Verify:
     def __init__(self):
-        if(not(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine"))):
+        global END
+        if(not(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine"))): 
             x= UpdateSun("Sunshine Instalador")
+            self.executeSunshine()
+            END= 1
         self.__dep__()
         if(self.localVersion != self.remoteVersion):
             self.update()
-        else:
-            subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)
+            self.executeSunshine()
+            END= 1
+        if(self.localVersion == self.remoteVersion and END == 0):
+            self.executeSunshine()
+    def executeSunshine(self):
+        subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)
     def update(self):
         option= messagebox.askyesno("Sunshine- Nova versão disponível do aplicativo","Deseja atualizar agora?")
         if(option):
@@ -105,17 +114,20 @@ except urllib.error.URLError:
     messagebox.showerror("Computador desconectado","Seu computador está desconectado da rede, conecte-se primeiro para atualizar ou baixar o aplicativo.")
     if(os.path.exists(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")):
         os.remove(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")
+    VERIFYFAILED= 1
 except TimeoutError:
     messagebox.showerror("Computador desconectado","Ocorreu uma perda de conexão, por favor tente novamente.")
     if(os.path.exists(
         os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")):
         os.remove(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")
+    VERIFYFAILED= 1
 except http.client.IncompleteRead:
     messagebox.showerror("Computador desconectado","Ocorreu uma perda de conexão, por favor tente novamente.")
     if(os.path.exists(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")):
         os.remove(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")
+    VERIFYFAILED= 1
 except TclError:
     pass
 
-if(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine\\Sunshine.exe")):
+if(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine\\Sunshine.exe") and VERIFYFAILED == 1):
     subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)

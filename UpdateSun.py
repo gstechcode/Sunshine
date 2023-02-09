@@ -108,6 +108,60 @@ class Verify:
        self.remoteVersion= page.find(id="user-content-VERSAOAPP")
        self.remoteVersion= str(float(self.remoteVersion.contents[0]))
 
+class Dependences:
+    def __init__(self):
+        self.display= Tk()
+        self.currentStatus= ""
+        self.debug= 1
+        self.display.geometry("500x500")
+        self.display.title("Sunshine - Verificação de dependências")
+        self.display.config(bg="orange",padx="30px", pady="30px")
+        self.label0= Label(self.display, text=f"Olá {os.getlogin()}", bg="orange", fg="white", font="Arial 21 bold")
+        self.label0.pack(pady="20px")
+        self.label= Label(self.display, text="Baixando arquivos necessários...", bg="orange", fg="white", font="Arial 19 bold")
+        self.label.pack(pady="20px")
+        self.progressbar= Progressbar(self.display, orient="horizontal", maximum="100", length=500, mode="determinate")
+        self.progressbar.pack()
+        self.pcent= Label(self.display, text="0%", bg="orange", fg="white", font="Arial 19 bold")
+        self.pcent.pack(pady="20px")
+        self.inkscape()
+        self.meshlab()
+        self.end()
+        self.display.mainloop()
+    def inkscape(self):
+        self.currentStatus= "Baixando Inkscape..."
+        self.download(os.environ["USERPROFILE"] + "\\Downloads\\inkscape.msi","https://inkscape.org/gallery/item/37366/inkscape-1.2.2_2022-12-09_732a01da63-x64.msi")
+        self.install("inkscape.msi")
+        self.progressbar["value"]= 0
+        self.pcent["text"]= 0
+        self.debug= 1
+    def meshlab(self):
+        self.currentStatus= "Baixando MeshLab..."
+        self.download(os.environ["USERPROFILE"] + "\\Downloads\\meshlab.exe","https://github.com/cnr-isti-vclab/meshlab/releases/download/MeshLab-2022.02/MeshLab2022.02-windows.exe")
+        self.install("meshlab.exe")
+    def end(self):
+        self.display.destroy()
+    def download(self, name, URL):
+        self.label["text"]= self.currentStatus
+        while self.debug:
+            x= request.urlretrieve(URL, filename= name,reporthook= self.Ldownload)
+    def Ldownload(self, blocknum, blocksize, totalsize):
+        self.label["text"]= self.currentStatus
+        self.display.update()
+        if(totalsize == -1):
+            print("negativo")
+            self.debug= 1
+            return 0
+        pcent= (blocknum*blocksize/totalsize) * 100
+        self.progressbar["value"]= pcent
+        self.pcent["text"]= f"{int(pcent)}%"
+        self.debug= 0
+    def install(self, arquivo): #instala de acordo com a pasta downloads
+        os.system('"' + os.environ["USERPROFILE"] + "\\Downloads\\" + arquivo)
+
+
+Dependences()
+'''
 try:
     y= Verify()
 except urllib.error.URLError:
@@ -131,3 +185,5 @@ except TclError:
 
 if(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine\\Sunshine.exe") and VERIFYFAILED == 1):
     subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)
+
+'''

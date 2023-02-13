@@ -100,12 +100,12 @@ class Verify:
     def __dep__(self):
        localVersion= open(os.environ["USERPROFILE"] + "\\Sunshine\\.version", "r")
        self.localVersion= str(float(localVersion.readlines()[0]))
-       fp = urllib.request.urlopen("https://github.com/gstechcode/Sunshine/tree/aplicativo")
+       fp = urllib.request.urlopen("https://github.com/gstechcode/Sunshine/blob/master/.version")
        mybytes = fp.read()
        mystr = mybytes.decode("utf8")
        fp.close()
        page= bs4.BeautifulSoup(mystr,"html.parser")
-       self.remoteVersion= page.find(id="user-content-VERSAOAPP")
+       self.remoteVersion= page.find(id="LC1")
        self.remoteVersion= str(float(self.remoteVersion.contents[0]))
 
 class Dependences:
@@ -130,14 +130,14 @@ class Dependences:
         self.display.mainloop()
     def inkscape(self):
         self.currentStatus= "Baixando Inkscape..."
-        self.download(os.environ["USERPROFILE"] + "\\Downloads\\inkscape.msi","https://inkscape.org/gallery/item/37366/inkscape-1.2.2_2022-12-09_732a01da63-x64.msi")
+        self.download(os.environ["USERPROFILE"] + '\\Downloads\\inkscape.msi','https://inkscape.org/gallery/item/37366/inkscape-1.2.2_2022-12-09_732a01da63-x64.msi')
         self.install("inkscape.msi")
         self.progressbar["value"]= 0
         self.pcent["text"]= 0
         self.debug= 1
     def meshlab(self):
         self.currentStatus= "Baixando MeshLab..."
-        self.download(os.environ["USERPROFILE"] + "\\Downloads\\meshlab.exe","https://github.com/cnr-isti-vclab/meshlab/releases/download/MeshLab-2022.02/MeshLab2022.02-windows.exe")
+        self.download(os.environ["USERPROFILE"] + '\\Downloads\\meshlab.exe','https://github.com/cnr-isti-vclab/meshlab/releases/download/MeshLab-2022.02/MeshLab2022.02-windows.exe')
         self.install("meshlab.exe")
     def end(self):
         self.display.destroy()
@@ -157,13 +157,16 @@ class Dependences:
         self.pcent["text"]= f"{int(pcent)}%"
         self.debug= 0
     def install(self, arquivo): #instala de acordo com a pasta downloads
-        os.system('"' + os.environ["USERPROFILE"] + "\\Downloads\\" + arquivo)
+        os.system('"' + os.environ["USERPROFILE"] + "\\Downloads\\" + arquivo + '"')
+        os.remove(os.environ["USERPROFILE"] + "\\Downloads\\" + arquivo)
 
-
-Dependences()
-'''
 try:
-    y= Verify()
+    if(not(os.path.exists("C:\\Program Files\\Inkscape")) and not(os.path.exists("C:\\Program Files\\VCG"))):
+       depend= Dependences() 
+    if(not(os.path.exists(r"C:\multimeshscripting\scripts\simple_script.mlx"))):
+        messagebox.showerror("Multimesh não foi encontrado!","Para perfeito funcionamento da etapa de otimização de STLs é necessário ter o arquivo C:\multimeshscripting\scripts\simple_script.mlx")
+    else:
+        verificacao= Verify()
 except urllib.error.URLError:
     messagebox.showerror("Computador desconectado","Seu computador está desconectado da rede, conecte-se primeiro para atualizar ou baixar o aplicativo.")
     if(os.path.exists(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")):
@@ -185,5 +188,3 @@ except TclError:
 
 if(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine\\Sunshine.exe") and VERIFYFAILED == 1):
     subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)
-
-'''

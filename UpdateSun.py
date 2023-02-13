@@ -86,7 +86,6 @@ class Verify:
         self.__dep__()
         if(self.localVersion != self.remoteVersion):
             self.update()
-            self.executeSunshine()
             END= 1
         if(self.localVersion == self.remoteVersion and END == 0):
             self.executeSunshine()

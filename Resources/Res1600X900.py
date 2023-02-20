@@ -23,30 +23,34 @@ class functions(s.settings):
             p.click(1460,225)
     def IPR(self, btn):
         self.DownMenu()
+        t.sleep(3)
         if(btn == "on"):
             p.PAUSE=0.5
-            p.click(37,373, clicks=4)
-            p.click(235,486)
-            t.sleep(3)
+            p.click(37,372, clicks=4)
+            self.DownMenu()
+            p.click(235,483)
             self.Transp("on")
             self.Dist("on")
         else:
+            self.DownMenu()
             p.PAUSE=0.5
-            p.click(38,431, clicks=4)
-            p.click(236,540)
-            t.sleep(3)
+            p.click(37,372, clicks=4)
+            self.DownMenu()
+            p.click(235,483)
             self.Dist("off")
             
     def Dist(self,btn):
+        self.DownMenu()
+        p.click(37,373, clicks=4)
         if(btn == "off"):
-            p.click(39,474)
+            p.click(38,418)
             p.click(61,559)
         else:
-            p.click(36,414)
-            p.click(203,560)
+            p.click(38,418)
+            p.click(203,561)
     def DownMenu(self):
-        p.moveTo(255,735)
-        p.click(255,735, clicks=2)
+        p.moveTo(256,730)
+        p.click(256,730, clicks=2)
     def Photo(self,text):
         p.click(1567,640)
         p.write(text)
@@ -96,9 +100,9 @@ class functions(s.settings):
         
     def Mand(self,btn):
         if(btn == "off"):
-            p.click(1460,118)
+            p.click(1467,115)
         else:
-            p.click(1530,115)
+            p.click(1536,115)
     def Max(self,btn):
         if(btn == "off"):
             p.click(1463,92)
@@ -201,12 +205,17 @@ class functions(s.settings):
             self.IPR("on")
             self.IPRPhoto("sup")
             self.Selfie("S")
+            p.PAUSE= 1
+            self.DownMenu()
+            p.click(37,428)
+            p.click(237,538)
+            p.click(35,476)
+            p.click(51,562)
     def Selfie(self, name):
         p.screenshot(region=(300,80,980,720)).save(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\" + name + ".png")
     def captOclInf(self,op):
         if(op == "inf"):
-            t.sleep(3)
-            self.IPR("off")
+            t.sleep(2)
             self.Menu("Oinf")
             self.Max("off")
             self.Mand("on")
@@ -240,5 +249,6 @@ class functions(s.settings):
             self.IPR("on")
             self.IPRPhoto("inf")
             self.Selfie("I")
+            self.IPR("off")
     
         

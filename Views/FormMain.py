@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QCursor
 import os, json
 from unidecode import unidecode
@@ -358,7 +359,6 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(0)
         self.ortodontista.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Sunshine"))

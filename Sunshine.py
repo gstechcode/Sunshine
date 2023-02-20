@@ -9,6 +9,7 @@ from Libs import Report14
 from Libs import Report12
 from Libs import IPR
 from Libs import ConvGIF
+from Libs.Report19 import Report19
 from Libs import ConvertSTLs
 
 class Sunshine:
@@ -18,7 +19,7 @@ class Sunshine:
 		if(banco["relatorios1214"]):
 			report14= Report14.Report14(banco)
 			report12= Report12.Report12(banco)
-			report12= Report12.Report12(banco)
+		report19= Report19()
 		if(banco["capturas"]):
 			capturas= Capture.CaptureView(banco)
 		if(banco["relatorioipr"]): 

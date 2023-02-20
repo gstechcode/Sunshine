@@ -11,7 +11,7 @@ class ConvertSTLs:
                 self.master= master
                 self.translateVars()
                 self.temp= Tk()
-                self.temp.title("PyRelator - Conversor de STLs")
+                self.temp.title("Sunshine - Conversor de STLs")
                 self.temp.config(bg="orange", padx="100px", pady="30px")
                 self.label= Label(self.temp, text="Pronto para otimizar os STLs?",bg="orange", fg="white", font="Arial 15")
                 self.btn= Button(self.temp, text="Sim", command= self.rename, bg="green", fg="white", relief="flat", font="Arial 18")
@@ -52,7 +52,7 @@ class ConvertSTLs:
                         os.mkdir(f"{os.environ['USERPROFILE']}\\Sunshine\\Convert")
                 self.localdoc= f"{os.environ['USERPROFILE']}\\Sunshine\\Convert"
                 shutil.move(f"{self.path}\\{model}",f"{self.localdoc}\\{model}")
-                return f'"C:\Program Files\VCG\MeshLab\meshlabserver.exe" -i "{self.localdoc}\{model}" -o "{self.localdoc}\{model}" -s C:\multimeshscripting\scripts\simple_script.mlx -om vc fq wn'
+                return f'"C:\Program Files\VCG\MeshLab\meshlabserver.exe" -i "{self.localdoc}\{model}" -o "{self.localdoc}\{model}" -s "{os.environ["USERPROFILE"]}\Sunshine\multimeshscripting\scripts\simple_script.mlx" -om vc fq wn'
         def processSTL(self):
                 DETACHED_PROCESS = 0x00000008
                 script= self.getSTL("15.stl")

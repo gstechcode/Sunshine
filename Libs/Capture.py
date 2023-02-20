@@ -1,4 +1,6 @@
 from tkinter import *
+from tkinter import messagebox
+import sys
 k= Tk()
 width= k.winfo_screenwidth()
 height= k.winfo_screenheight()
@@ -8,9 +10,9 @@ if(width == 1600 and height == 900):
 elif(width == 1366 and height == 768):
     from Resources import Res1366X768 as f
 else:
-    from Resources import Res1366X768 as f
-
-
+    messagebox.showerror("Resolução não suportada!","Seu computador não está na resolução ideal, certifique-se de que esteja nas resoluções: \n\n - 1600x900 \n - 1366x768")
+    sys.exit()
+    
 import pyautogui as p
 import sys, shutil, os
 

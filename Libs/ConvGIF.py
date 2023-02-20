@@ -21,7 +21,7 @@ class ConvGIF:
                 btn.pack(pady="10px")
                 self.temp.mainloop()
                 self.display= Tk()
-                self.display.title("PyReport")
+                self.display.title("Sunshine")
                 self.lbl= tt.Label(self.display, text="Verificando vídeos... 0%", fg="white", bg="orange", font="Arial 18")
                 self.lbl.pack(pady="10px")
                 self.progress= ttk.Progressbar(self.display, mode="determinate", orient="horizontal", length= 100)

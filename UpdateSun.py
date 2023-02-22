@@ -39,7 +39,6 @@ class UpdateSun:
         self.label["text"]= "Baixando arquivo..."
         self.display.update()
         if(totalsize == -1):
-            print("negativo")
             self.debug= 1
             return 0
         pcent= (blocknum*blocksize/totalsize) * 100
@@ -81,6 +80,7 @@ class Verify:
         global END
         if(not(os.path.exists(os.environ["USERPROFILE"] + "\\Sunshine"))): 
             x= UpdateSun("Sunshine Instalador")
+            self.installLocalDependences()
             self.executeSunshine()
             END= 1
         self.__dep__()
@@ -88,7 +88,14 @@ class Verify:
             self.update()
             END= 1
         if(self.localVersion == self.remoteVersion and END == 0):
+            self.installLocalDependences()
             self.executeSunshine()
+    def installLocalDependences(self):
+        if(not(os.path.exists(r'C:\Program Files\VCG\MeshLab\meshlabserver.exe'))):
+                try:
+                    depend= Dependences("meshlab")
+                except Exception:
+                    pass
     def executeSunshine(self):
         subprocess.call('"' + os.environ["USERPROFILE"] + '\\Sunshine\\Sunshine.exe' +'"', creationflags= 0x08000000)
     def update(self):
@@ -108,7 +115,7 @@ class Verify:
        self.remoteVersion= str(float(self.remoteVersion.contents[0]))
 
 class Dependences:
-    def __init__(self):
+    def __init__(self, op):
         self.display= Tk()
         self.currentStatus= ""
         self.debug= 1
@@ -123,8 +130,10 @@ class Dependences:
         self.progressbar.pack()
         self.pcent= Label(self.display, text="0%", bg="orange", fg="white", font="Arial 19 bold")
         self.pcent.pack(pady="20px")
-        self.inkscape()
-        self.meshlab()
+        if(op == "ink"):
+            self.inkscape()
+        elif(op == "meshlab"):
+            self.meshlab()
         self.end()
         self.display.mainloop()
     def inkscape(self):
@@ -135,9 +144,8 @@ class Dependences:
         self.pcent["text"]= 0
         self.debug= 1
     def meshlab(self):
-        self.currentStatus= "Baixando MeshLab..."
-        self.download(os.environ["USERPROFILE"] + '\\Downloads\\meshlab.exe','https://github.com/cnr-isti-vclab/meshlab/releases/download/MeshLab-2022.02/MeshLab2022.02-windows.exe')
-        self.install("meshlab.exe")
+        self.currentStatus= "Instalando MeshLab..."
+        os.system('"' + os.environ['USERPROFILE'] + '\\Sunshine\\Tools\\meshlab.exe' + '"')
     def end(self):
         self.display.destroy()
     def download(self, name, URL):
@@ -160,12 +168,9 @@ class Dependences:
         os.remove(os.environ["USERPROFILE"] + "\\Downloads\\" + arquivo)
 
 try:
-    if(not(os.path.exists("C:\\Program Files\\Inkscape")) and not(os.path.exists("C:\\Program Files\\VCG"))):
-       depend= Dependences() 
-    if(not(os.path.exists(r"C:\multimeshscripting\scripts\simple_script.mlx"))):
-        messagebox.showerror("Multimesh não foi encontrado!","Para perfeito funcionamento da etapa de otimização de STLs é necessário ter o arquivo C:\multimeshscripting\scripts\simple_script.mlx")
-    else:
-        verificacao= Verify()
+    if(not(os.path.exists("C:\\Program Files\\Inkscape"))):
+       depend= Dependences("ink")  
+    verificacao= Verify()
 except urllib.error.URLError:
     messagebox.showerror("Computador desconectado","Seu computador está desconectado da rede, conecte-se primeiro para atualizar ou baixar o aplicativo.")
     if(os.path.exists(os.environ["USERPROFILE"] + "\\downloads\\Sunshine.zip")):

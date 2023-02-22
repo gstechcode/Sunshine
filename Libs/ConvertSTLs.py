@@ -11,6 +11,7 @@ class ConvertSTLs:
                 self.master= master
                 self.translateVars()
                 self.temp= Tk()
+                self.temp.iconbitmap(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Icon.ico")
                 self.temp.title("Sunshine - Conversor de STLs")
                 self.temp.config(bg="orange", padx="100px", pady="30px")
                 self.label= Label(self.temp, text="Pronto para otimizar os STLs?",bg="orange", fg="white", font="Arial 15")

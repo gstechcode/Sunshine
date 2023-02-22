@@ -17,6 +17,7 @@ class Report:
         else:
             self.imgtemp= os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp"
             self.display= Tk()
+            self.display.iconbitmap(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Icon.ico")
             self.display.config(bg="orange",padx="20px",pady="20px")
             self.display.title("PyReport")
             self.__buildvars__()

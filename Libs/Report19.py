@@ -28,12 +28,15 @@ class Report19:
         if(self.db["infatt"] != ""):
             inf += 1
 
+        if(self.db["diagnostico"]):
+            return False
         if(sup > 12 and inf > 12):
             return True
         else:
             return False
     def form(self):
         self.display= tk.Tk()
+        self.display.iconbitmap(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Icon.ico")
         menubar = tk.Menu(self.display, bg="orange")
         filemenu = tk.Menu(menubar, tearoff=0)
         filemenu.add_command(label="Configurar", command= self.configConsultors)
@@ -54,6 +57,7 @@ class Report19:
         self.display.destroy()
     def configConsultors(self):
         self.root= tk.Tk()
+        self.root.iconbitmap(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Icon.ico")
         self.root.title("Configurações de Consultor")
         self.root.config(bg="orange", padx="30px", pady="30px")
         self.treeview= ttk.Treeview(self.root, columns= ["Nome","Telefone"], show="headings")

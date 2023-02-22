@@ -1,7 +1,8 @@
-import json, os, time
+import json, os, time, sys
 import psutil
+import pyautogui
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from threading import Thread
 from Views import FormMain
 from Libs import Capture
@@ -9,7 +10,7 @@ from Libs import Report14
 from Libs import Report12
 from Libs import IPR
 from Libs import ConvGIF
-from Libs.Report19 import Report19
+from Libs.Report19 import Report19		
 from Libs import ConvertSTLs
 
 class Sunshine:
@@ -21,7 +22,10 @@ class Sunshine:
 			report12= Report12.Report12(banco)
 		report19= Report19()
 		if(banco["capturas"]):
-			capturas= Capture.CaptureView(banco)
+			try:
+				capturas= Capture.CaptureView(banco)
+			except pyautogui.PyAutoGUIException:
+				messagebox.showerror("Sunshine - Erro de Coordenadas","Você possui coordenadas não cadastradas! Certifique-se de cadastra-las primeiro antes de executar a etapa de captura!")
 		if(banco["relatorioipr"]): 
 			ipr= IPR.Report(banco)
 		if(banco["otimizargifs"]):

@@ -10,16 +10,24 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QAction
-from PyQt5.QtGui import QCursor
-import os, json
+import tkinter as tk
+from tkinter import messagebox
+from PyQt5.QtGui import QCursor, QIcon
+import os, json, sys
 from unidecode import unidecode
+from Libs.Calibration import Calibration
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        self.janela= MainWindow
+class Ui_MainWindow(QtWidgets.QMainWindow):
+    def setupUi(self):
+        self.modo= "exit"
+        self.janela= self
+        MainWindow= self
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Icon.ico"), QtGui.QIcon.Selected, QtGui.QIcon.On)
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(755, 697)
+        MainWindow.resize(755, 755)
+        MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("background: orange")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -348,17 +356,72 @@ class Ui_MainWindow(object):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 755, 21))
         self.menubar.setObjectName("menubar")
+        self.menubar.setStyleSheet("background: white; color: black")
+        self.actionCalibration= QAction("Calibração", MainWindow)
+        self.actionExport= QAction("Exportar", MainWindow)
+        self.actionImport= QAction("Importar", MainWindow)
+        actionFile = self.menubar.addMenu("Configurações")
+        actionFile.addAction(self.actionCalibration)
+        actionFile.addAction(self.actionExport)
+        actionFile.addAction(self.actionImport)
+        self.actionCalibration.triggered.connect(Calibration)
+        self.actionExport.triggered.connect(self.Export)
+        self.actionImport.triggered.connect(self.Import)
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.actionanterior = QtWidgets.QAction(MainWindow)
         self.actionanterior.setObjectName("actionanterior")
-
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         self.ortodontista.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+    
+    def closeEvent(self,event):
+        if(self.modo == "exit"):
+            sys.exit()
+    def Export(self):
+        self.iodisplay= tk.Tk()
+        self.iodisplay.title("Sunshine - Exportação")
+        self.iodisplay.config(bg="orange",padx="30px",pady="30px")
+        label= tk.Label(self.iodisplay, text="Cole o caminho da pasta para exportação", font="arial 20", fg="white", bg="orange")
+        label.pack(pady="10px")
+        self.iocaminho= tk.Entry(self.iodisplay, font="arial 16", justify="center")
+        self.iocaminho.pack(pady="10px")
+        self.iobtn= tk.Button(self.iodisplay, text="Exportar",font="arial 16", bg="green", fg="white", relief="flat", command=self.ExportOK)
+        self.iobtn.pack(pady="10px")
+        self.iodisplay.mainloop()
+    def ExportOK(self):
+        arquivo= open(os.environ["USERPROFILE"] + "\\Sunshine\\coords.json", "r")
+        cache= json.loads(arquivo.readlines()[0])
+        print(cache)
+        arquivo.close()
+        novo= open(self.iocaminho.get() + "\\coords.json","w")
+        novo.write(json.dumps(cache))
+        novo.close()
+        messagebox.showinfo("Sunshine","Exportado com sucesso!")
+        self.iodisplay.destroy()
+    def Import(self):
+        self.iodisplay= tk.Tk()
+        self.iodisplay.title("Sunshine - Exportação")
+        self.iodisplay.config(bg="orange",padx="30px",pady="30px")
+        label= tk.Label(self.iodisplay, text="Cole o caminho da pasta para importação", font="arial 20", fg="white", bg="orange")
+        label.pack(pady="10px")
+        self.iocaminho= tk.Entry(self.iodisplay, font="arial 16", justify="center")
+        self.iocaminho.pack(pady="10px")
+        self.iobtn= tk.Button(self.iodisplay, text="Importar",font="arial 16", bg="green", fg="white", relief="flat", command=self.ImportOK)
+        self.iobtn.pack(pady="10px")
+        self.iodisplay.mainloop()
+    def ImportOK(self):
+        arquivo= open(self.iocaminho.get() + "\\coords.json", "r")
+        cache= json.loads(arquivo.readlines()[0])
+        arquivo.close()
+        novo= open(os.environ["USERPROFILE"] + "\\Sunshine\\coords.json","w")
+        novo.write(json.dumps(cache))
+        novo.close()
+        messagebox.showinfo("Sunshine","Importado com sucesso!")
+        self.iodisplay.destroy()
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Sunshine"))
@@ -452,6 +515,7 @@ class Ui_MainWindow(object):
         self.db["otimizargifs"]= self.otimizargifs.isChecked()
         self.db["otimizarstls"]= self.otimizarstls.isChecked()
         self.file.write(json.dumps(self.db))
+        self.modo= "natural"
         self.file.close()
         self.janela.close()
     def formant(self):
@@ -469,6 +533,7 @@ class Ui_MainWindow(object):
         self.file= open(os.environ["USERPROFILE"] + "\\Sunshine\\Cache\\FormMain.cache","w")
         file= json.dumps(self.db)
         self.file.write(file)
+        self.modo= "natural"
         self.file.close()
         self.janela.close()
     def Diagnostico(self):
@@ -514,8 +579,7 @@ class Execute:
     def __init__(self):
         import sys
         app = QtWidgets.QApplication(sys.argv)
-        MainWindow = QtWidgets.QMainWindow()
         ui = Ui_MainWindow()
-        ui.setupUi(MainWindow)
-        MainWindow.show()
+        ui.setupUi()
+        ui.show()
         app.exec_()

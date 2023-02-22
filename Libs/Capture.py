@@ -1,27 +1,21 @@
 from tkinter import *
 from tkinter import messagebox
 import sys
-k= Tk()
-width= k.winfo_screenwidth()
-height= k.winfo_screenheight()
-k.destroy()
-if(width == 1600 and height == 900):
-    from Resources import Res1600X900 as f
-elif(width == 1366 and height == 768):
-    from Resources import Res1366X768 as f
-else:
-    messagebox.showerror("Resolução não suportada!","Seu computador não está na resolução ideal, certifique-se de que esteja nas resoluções: \n\n - 1600x900 \n - 1366x768")
-    sys.exit()
-    
+from Resources import Resolution as f
 import pyautogui as p
-import sys, shutil, os
+import sys, shutil, os, json
 
 class CaptureView(f.functions):
     def __init__(self,master):
+        self.loadCoords()
         self.path= master["path"]
         super().__init__()
         self.master= master
         self.capture()
+    def loadCoordsEst(self):
+        arquivo= open(os.environ["USERPROFILE"] + "\\Sunshine\\coords.json","r")
+        self.stCoords= json.loads(arquivo.readlines()[0])
+        arquivo.close()
     def capture(self):
         while True:
             self.captFront()
@@ -57,7 +51,7 @@ class CaptureView(f.functions):
             if(repeatEst == "NAO"):
                 break
             else:
-                p.click(1134,14)
+                p.click(600,80)
         if(self.master["sup"] != "0" or self.master["diagnostico"] == True):
             shutil.copy(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\5.png", self.master["path"] + "\\05 - Sobreposicao " + self.master["setup"] + " Superior - " + self.master["paciente"] + ".png")
         if(self.master["inf"] != "0" or self.master["diagnostico"] == True):

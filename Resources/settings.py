@@ -1,5 +1,6 @@
 import pyautogui as p
 import time as t
+import json, os
 
 class settings:
     def __init__(self):
@@ -10,33 +11,38 @@ class settings:
             self.chrome= p.getWindowsWithTitle("Google Chrome")
         except Exception:
             pass
+    def loadCoordsEst(self):
+        arquivo= open(os.environ["USERPROFILE"] + "\\Sunshine\\coords.json","r")
+        self.stCoords= json.loads(arquivo.readlines()[0])
+        arquivo.close()
     def setupActive(self):
         p.click(26,237)
     def estCapt(self, op, arcs):
-        p.click(1400,34)
+        self.loadCoordsEst()
+        p.click(self.stCoords["BLANK"])
         t.sleep(2)
         path= self.path + "\\"
-        p.click(254,154)
+        p.click(self.stCoords["STARTMENU"])
         t.sleep(3)
-        p.click(226,239)
+        p.click(self.stCoords["BTNEST"])
         t.sleep(1)
         if(op == "SIM"):
-            p.click(1140,73)
-            p.click(486,12)
+            p.click(self.stCoords["UPMENUEST"])
             t.sleep(1)
             if(arcs == "Superior" or arcs == "Ambas"):
-                p.click(1140,73)
+                p.click(self.stCoords["UPMENUEST"])
+                p.click(self.stCoords["BLANK"])
                 t.sleep(2)
-                p.screenshot(region=(253,50,871,370)).save(path + "09 - Estagiamento " + str(self.master["sup"]) + " Superior - " + self.master["setup"] + ".png")
+                p.screenshot(region=(self.stCoords["STARTPOSITIONEST"][0],self.stCoords["STARTPOSITIONEST"][1],self.stCoords["ENDPOSITIONEST"][0] - self.stCoords["STARTPOSITIONEST"][0],self.stCoords["ENDPOSITIONEST"][1] - self.stCoords["STARTPOSITIONEST"][1])).save(path + "09 - Estagiamento " + str(self.master["sup"]) + " Superior - " + self.master["setup"] + ".png")
             if(arcs == "Inferior" or arcs == "Ambas"):
-                p.click(1141,359)
-                p.click(486,12)
+                p.click(self.stCoords["DOWNMENUEST"])
+                p.click(self.stCoords["BLANK"])
                 t.sleep(2)
-                p.screenshot(region=(253,97,871,320)).save(path + "10 - Estagiamento " + str(self.master["inf"]) + " Inferior - " + self.master["setup"] + ".png")
-        p.click(1134,12)
-        p.click(354,71)
+                p.screenshot(region=(self.stCoords["STARTPOSITIONEST"][0],self.stCoords["STARTPOSITIONEST"][1],self.stCoords["ENDPOSITIONEST"][0] - self.stCoords["STARTPOSITIONEST"][0],self.stCoords["ENDPOSITIONEST"][1] - self.stCoords["STARTPOSITIONEST"][1])).save(path + "10 - Estagiamento " + str(self.master["inf"]) + " Inferior - " + self.master["setup"] + ".png")
+        p.click(self.stCoords["CLOSEEST"])
+        p.click(self.stCoords["BTNMOV"])
         t.sleep(4)
-        p.screenshot(region=(3,32,1129,596)).save(path + "11 - Tabela de Movimentacao - " + self.master["setup"] + ".png")
+        p.screenshot(region=(self.stCoords["STARTPOSITIONMOV"][0],self.stCoords["STARTPOSITIONMOV"][1],self.stCoords["ENDPOSITIONMOV"][0] - self.stCoords["STARTPOSITIONMOV"][0],self.stCoords["ENDPOSITIONMOV"][1] - self.stCoords["STARTPOSITIONMOV"][1])).save(path + "11 - Tabela de Movimentacao - " + self.master["setup"] + ".png")
         p.alert(title="Sucesso!", text="Capturas realizadas com sucesso!")
     def modelAc(self):
         p.press("pagedown")

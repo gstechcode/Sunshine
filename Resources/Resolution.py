@@ -2,57 +2,61 @@ from Resources import settings as s
 import pyautogui as p
 import time as t
 from tkinter import *
-import os
+import os, json
 import win32api
 import win32gui
 
 class functions(s.settings):
     def __init__(self):
+        self.loadCoords()
         super().__init__()
         p.PAUSE= 0.05
+    def loadCoords(self):
+        k= Tk()
+        self.widthquad= k.winfo_screenwidth()
+        self.heightquad= k.winfo_screenheight()
+        k.destroy()
+        arquivo = open(os.environ["USERPROFILE"] + "\\Sunshine\\coords.json", "r")
+        self.coords= json.loads(arquivo.readlines()[0])
     def Sobrepos(self,btn):
         if(btn == "on"):
-            p.click(1536,224)
+            p.click(self.coords["SobreposicaoON"])
         else:
-            p.click(1460,224)
+            p.click(self.coords["SobreposicaoOFF"])
     def Transp(self,btn):
         t.sleep(1)
         if(btn == "on"):
-            p.click(1534,143)
+            p.click(self.coords["TransparenciaON"])
         else:
-            p.click(1460,225)
+            p.click(self.coords["TransparenciaOFF"])
     def IPR(self, btn):
-        self.DownMenu()
         t.sleep(3)
         if(btn == "on"):
-            p.PAUSE=0.5
-            p.click(37,372, clicks=4)
+            p.PAUSE=1
             self.DownMenu()
-            p.click(235,483)
+            p.click(self.coords["IconeIPR"], clicks=1)
+            p.click(self.coords["IPRONOFF"])
             self.Transp("on")
             self.Dist("on")
+            p.PAUSE= 0.5
         else:
-            self.DownMenu()
-            p.PAUSE=0.5
-            p.click(37,372, clicks=4)
-            self.DownMenu()
-            p.click(235,483)
-            self.Dist("off")
-            
+            p.PAUSE= 1
+            p.click(self.coords["DISTOFF"])
+            p.click(self.coords["IconeIPR2"], clicks=1)
+            t.sleep(2)
+            p.click(self.coords["IPRONOFF2"])
+            p.PAUSE= 0.5
     def Dist(self,btn):
-        self.DownMenu()
-        p.click(37,373, clicks=4)
         if(btn == "off"):
-            p.click(38,418)
-            p.click(61,559)
+            p.click(self.coords["IconeDIST"])
+            p.click(self.coords["DISTOFF"])
         else:
-            p.click(38,418)
-            p.click(203,561)
+            p.click(self.coords["IconeDIST"])
+            p.click(self.coords["DISTON"])
     def DownMenu(self):
-        p.moveTo(256,730)
-        p.click(256,730, clicks=2)
+        p.click(self.coords["FINALMENU"], clicks=1)
     def Photo(self,text):
-        p.click(1567,640)
+        p.click(self.coords["ICONEFOTO"])
         p.write(text)
         p.press(["tab","tab","tab"])
         p.press("enter")
@@ -86,113 +90,117 @@ class functions(s.settings):
                 self.Photo("Vista Oclusal Inferior sem indicacao IPR")
     def Menu(self,btn):
         if(btn == "Otop"):
-            p.click(1570,345)
+            p.click(self.coords["VOCLSUP"])
         elif(btn == "Oinf"):
-            p.click(1570,311)
+            p.click(self.coords["VOCLINF"])
         elif(btn == "Right"):
-            p.click(1570,238)
+            p.click(self.coords["VOCLRIGHT"])
         elif(btn == "Left"):
-            p.click(1570,275)
+            p.click(self.coords["VOCLLEFT"])
         elif(btn == "Front"):
-            p.click(1570,166)
+            p.click(self.coords["VOCLFRONT"])
         elif(btn == "Post"):
-            p.click(1570,202)
+            p.click(self.coords["VOCLBACK"])
         
     def Mand(self,btn):
         if(btn == "off"):
-            p.click(1467,115)
+            p.click(self.coords["MANDOFF"])
         else:
-            p.click(1536,115)
+            p.click(self.coords["MANDON"])
     def Max(self,btn):
         if(btn == "off"):
-            p.click(1463,92)
+            p.click(self.coords["MAXOFF"])
         else:
-            p.click(1536,88)
-    def captFront(self):
+            p.click(self.coords["MAXON"])
+    def Enquadrar(self, mid= False):
+        initquad= self.coords["QUAD"]
+        #x + 18,75% - 80%
+        #y + 8% - 88%
+        finalquad= [0,0]
+        finalquad[0] = initquad[0] + int((self.widthquad * 61.25)/100)
+        finalquad[1] = initquad[1] + int((self.heightquad * 80)/100)
+        midcoordY= int(initquad[1] + ((finalquad[1] - initquad[1])/2))
+        midcoordX= int(initquad[0] + ((finalquad[0] - initquad[0])/2))
+
+        self.midcoord= [midcoordX,midcoordY]
+
+        self.initquad= initquad
+        self.finalquad= finalquad
+        self.screenCoord= (self.initquad[0],self.initquad[1],self.finalquad[0] - self.initquad[0],self.finalquad[1] - self.initquad[1])
+
         aux= 0
         dc = win32gui.GetDC(0)
-        win32gui.MoveToEx(dc,0,0)
-        win32gui.LineTo(dc,0,1600)
-        p.click(1569,417)
-        
-        p.alert(title="Atenção", text="Ajuste a posição inicial, alinhe com a linha desenhada na tela")
-        #Pega o contexto gráfico para o Desktop
-        dc = win32gui.GetDC(0)
-        #Desenha uma linha do ponto (0,0) até (1366,768)
         while True:
-            win32gui.MoveToEx(dc,0,391)
-            win32gui.LineTo(dc,1600,391)
-            win32gui.MoveToEx(dc,300,0)
-            win32gui.LineTo(dc,300,900)
-            win32gui.MoveToEx(dc,0,84)
-            win32gui.LineTo(dc,1600,84)
-            win32gui.MoveToEx(dc,1371,0)
-            win32gui.LineTo(dc,1371,900)
-            win32gui.MoveToEx(dc,0,710)
-            win32gui.LineTo(dc,1600,710)
+            win32gui.MoveToEx(dc,initquad[0],initquad[1])
+            win32gui.LineTo(dc,finalquad[0],initquad[1])
+
+            win32gui.MoveToEx(dc,initquad[0],initquad[1])
+            win32gui.LineTo(dc,initquad[0],finalquad[1])
+
+            win32gui.MoveToEx(dc,initquad[0],finalquad[1])
+            win32gui.LineTo(dc,finalquad[0],finalquad[1])
+
+            win32gui.MoveToEx(dc,finalquad[0],initquad[1])
+            win32gui.LineTo(dc,finalquad[0],finalquad[1])
+
+            if(mid):
+                win32gui.MoveToEx(dc,initquad[0],midcoordY)
+                win32gui.LineTo(dc,finalquad[0],midcoordY)
             aux += 1
             print(aux)
             if(aux == 60):
                 break
+    def captFront(self):
+        p.click(self.coords["ARCSOPEN"])
+        p.alert(title="Atenção", text="Ajuste a posição inicial, alinhe com a linha desenhada na tela")
+
+        self.Enquadrar(mid= True)
+
         t.sleep(3)
         self.Photo("Vista Oclusao Anterior")
         t.sleep(2)
-        p.screenshot(region=(300,84,1070,626)).save(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\7F.png")
+        p.screenshot(region= self.screenCoord).save(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\7F.png")
         t.sleep(1)
         #captura essa foto
     def captBack(self):
-        p.moveTo(700,391)
-        p.moveTo(700,391)
-        p.moveTo(700,391)
+        p.moveTo(self.midcoord)
+        p.moveTo(self.midcoord)
+        p.moveTo(self.midcoord)
         p.mouseDown(button="RIGHT")
-        p.moveTo(1067,391)
+        p.moveTo(self.midcoord[0] + 367,self.midcoord[1])
         p.mouseUp(button="LEFT")
         self.Photo("Vista Oclusao Posterior")
     def captLeft90(self):
-        p.moveTo(700,391)
+        p.moveTo(self.midcoord[0],self.midcoord[1])
         p.mouseDown(button="RIGHT")
-        p.moveTo(511,391)
+        p.moveTo(self.midcoord[0] - 189,self.midcoord[1])
         p.mouseUp(button="RIGHT")
         self.Photo("Vista Lateral Direita 90°")
     def captLeft45(self):
-        p.moveTo(700,391)
+        p.moveTo(self.midcoord[0],self.midcoord[1])
         p.mouseDown(button="RIGHT")
-        p.moveTo(593,391)
+        p.moveTo(self.midcoord[0] - 107,self.midcoord[1])
         p.mouseUp(button="RIGHT")
         self.Photo("Vista Lateral Direita 45°")
     def captRight90(self):
-        p.moveTo(700,391)
+        p.moveTo(self.midcoord[0],self.midcoord[1])
         p.mouseDown(button="RIGHT")
-        p.moveTo(480,391)
+        p.moveTo(self.midcoord[0] - 220,self.midcoord[1])
         p.mouseUp(button="RIGHT")
         self.Photo("Vista Lateral Esquerda 90°")
     def captRight45(self):
-        p.moveTo(700,391)
+        p.moveTo(self.midcoord[0],self.midcoord[1])
         p.mouseDown(button="RIGHT")
-        p.moveTo(795,391)
+        p.moveTo(self.midcoord[0] + 95,self.midcoord[1])
         p.mouseUp(button="RIGHT")
         self.Photo("Vista Lateral Esquerda 45°")
     def captOclSup(self,op):
         p.PAUSE= 0.2
-        dc = win32gui.GetDC(0)
         if(op == "sup"):
             self.Menu("Otop")
             self.Mand("off")
             p.alert(title="Atenção", text="Ajuste a posição superior")
-            aux= 0
-            while True:
-                win32gui.MoveToEx(dc,0,80)
-                win32gui.LineTo(dc,1600,80)
-                win32gui.MoveToEx(dc,300,0)
-                win32gui.LineTo(dc,300,900)
-                win32gui.MoveToEx(dc,0,800)
-                win32gui.LineTo(dc,1600,800)
-                win32gui.MoveToEx(dc,1280,0)
-                win32gui.LineTo(dc,1280,900)
-                aux += 1
-                print(aux)
-                if(aux == 60):
-                    break
+            self.Enquadrar()
             t.sleep(4)
             self.Photo("Vista Oclusal Superior")
         elif(op == "sob"):
@@ -206,13 +214,9 @@ class functions(s.settings):
             self.IPRPhoto("sup")
             self.Selfie("S")
             p.PAUSE= 1
-            self.DownMenu()
-            p.click(37,428)
-            p.click(237,538)
-            p.click(35,476)
-            p.click(51,562)
+            self.IPR("off")
     def Selfie(self, name):
-        p.screenshot(region=(300,80,980,720)).save(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\" + name + ".png")
+        p.screenshot(region=self.screenCoord).save(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\" + name + ".png")
     def captOclInf(self,op):
         if(op == "inf"):
             t.sleep(2)
@@ -220,21 +224,7 @@ class functions(s.settings):
             self.Max("off")
             self.Mand("on")
             p.alert(title="Atenção", text="Ajuste a posição inferior")
-            aux= 0
-            dc = win32gui.GetDC(0)
-            while True:
-                win32gui.MoveToEx(dc,0,80)
-                win32gui.LineTo(dc,1600,80)
-                win32gui.MoveToEx(dc,300,0)
-                win32gui.LineTo(dc,300,900)
-                win32gui.MoveToEx(dc,0,800)
-                win32gui.LineTo(dc,1600,800)
-                win32gui.MoveToEx(dc,1280,0)
-                win32gui.LineTo(dc,1280,900)
-                aux += 1
-                print(aux)
-                if(aux == 60):
-                    break
+            self.Enquadrar()
             t.sleep(4)
             self.Photo("Vista Oclusal Inferior")
         elif(op == "sob"):
@@ -243,12 +233,9 @@ class functions(s.settings):
             self.Selfie("6")
         else:
             self.Sobrepos("off")
-            p.click(39,434)
-            p.click(256,156)
             self.DownMenu()
             self.IPR("on")
             self.IPRPhoto("inf")
             self.Selfie("I")
             self.IPR("off")
-    
         

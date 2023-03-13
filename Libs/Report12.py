@@ -16,7 +16,11 @@ import sys
 class Report12:
         def __init__(self, db):
                 self.calc= 1
-                height= 1600
+                db= self.openDB()
+                if("Consultor" in db):
+                        height= 2300
+                else:
+                        height= 1600
                 width= 1104
                 bg= (255,255,255)
                 padx= 40
@@ -51,7 +55,7 @@ class Report12:
                 self.img(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\OrthoAligner.png",-7,center= ["c",-60])
                 texto= "O Setup Virtual para < {paciente} > foi planejado conforme suas instruções."
                 if("a" in self.comment):
-                	texto += " <break> <break> " + self.comment + " <break> "
+                	texto += " <break> <break> " + self.comment
                 texto += " <break> <break> Para realizar a etapa do presente planejamento, serão necessários: "
                 texto += "<break> <break> Alinhadores Superiores: < {sup} > "
                 texto += "<break> Alinhadores Inferiores: < {inf} > "
@@ -96,7 +100,16 @@ class Report12:
                 if(self.infattt != ""):
                         self.att += 1
 
-                texto= texto.format(paciente=self.paciente,sup=str(sup) + self.supattt,inf=str(inf) + self.infattt,total=int(self.sup) + int(self.inf) + int(self.att), extenso=self.extenso(str(int(self.sup) + int(self.inf) + int(self.att))),pacote= self.pacote)
+
+                db= self.openDB()
+
+                if("Consultor" in db):
+                        texto += """ < <break> Casos OrthoAligner ONE e PRO <break> > <break> Se o seu tratamento se encaixou em um pacote ONE e PRO, você receberá somente até a etapa 12, para acompanharmos com você a evolução do caso , isto porque é um caso de grandes movimentações ortodônticas a serem realizadas, movimentações essas que geram uma distorção no modelo na região cervical. Isso se explica porque a gengiva não acompanha as movimentações realizadas no dente virtualmente. <break> <break> Por conta disso, ao solicitar a continuação do caso após o uso dos primeiros 12 pares de placas, pode ser que seja necessário a realização de um recorte cervical nas próximas placas ou até mesmo o envio de um novo escaneamento. Essa medida é benéfica para boa evolução do caso, pois quando o novo escaneamento é enviado, temos o correto posicionamento do periodonto com o dente, melhorando assim a previsibilidade. O recorte cervical também pode ser indicado pois ele remove a área de retentividade criada, melhora a adaptação e conforto ao paciente. Em algumas situações essa medida pode ser obrigatória e não somente benéfica. < <break> <break> Caso opte pelo recorte cervical, a taxa cobrada pelo serviço deverá ser consultada com o consultor comercial da sua região ({Consultor} - {ConsultorTel}). >"""
+                else:
+                        db= {}
+                        db["Consultor"]= ""
+                        db["ConsultorTel"]= ""
+                texto= texto.format(paciente=self.paciente,sup=str(sup) + self.supattt,inf=str(inf) + self.infattt,total=int(self.sup) + int(self.inf) + int(self.att), extenso=self.extenso(str(int(self.sup) + int(self.inf) + int(self.att))),pacote= self.pacote, Consultor= db["Consultor"], ConsultorTel= db["ConsultorTel"])
                 self.Paragraph(texto)
                 self.cRect((0,height-100,width,height),bg=(31,91,141))
                 self.Textc("Consulte as informações completas na Ficha de Instruções",(255,255,255),["c",height-70], 40)
@@ -137,6 +150,11 @@ class Report12:
                 self.comment= self.database["comentario"]
         def Reg(self,text):
                 self.log.write(self.data + " - " + text)
+        def openDB(self):
+                file= open(os.environ["USERPROFILE"] + "\\Sunshine\\Cache\\FormMain.cache","r")
+                arq= file.readlines()[0]
+                file.close()
+                return json.loads(arq)
         def Paragraph(self,txt):
         		temp= " "
         		cont= 40

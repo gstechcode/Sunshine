@@ -4,20 +4,13 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
-class Report19:
+class FormConsultor:
     def __init__(self):
         self.width= 1000
         self.db= self.openDB()
         if(self.gerar()):
-            self.padx= 40
-            self.fonte= self.loadFont("Arial",15)
-            self.height= 1200
-            self.img= Image.new("RGB", size=(self.width,self.height), color=(255,255,255))
-            self.cursor= ImageDraw.Draw(self.img)
             self.loadConsultors()
             self.form()
-            self.header()
-            self.img.save(self.db["path"] + f"\\19 - Aviso Importante {self.db['setup']} - {self.db['paciente']}.png", format="PNG", optimize=True)
         else:
             pass
     def gerar(self):
@@ -54,7 +47,21 @@ class Report19:
         self.salvar.pack(pady="30px")
         self.display.mainloop()
     def end(self):
+        self.db["Consultor"]= self.varCombo.get()
+        self.db["ConsultorTel"]= self.getConsultor(self.varCombo.get())["Telefone"]
+        self.rewriteDB(self.db)
         self.display.destroy()
+    def getConsultor(self, txt):
+        file= open(os.environ["USERPROFILE"] + "\\Sunshine\\consultors.json","r")
+        selectedConsultor= json.loads(file.readlines()[0])
+        file.close()
+        return selectedConsultor[txt]
+    
+    def rewriteDB(self, txt):
+        file= open(os.environ["USERPROFILE"] + "\\Sunshine\\Cache\\FormMain.cache","w")
+        file.write(json.dumps(txt))
+        file.close()
+
     def configConsultors(self):
         self.root= tk.Tk()
         self.root.iconbitmap(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Icon.ico")
@@ -131,6 +138,7 @@ class Report19:
     def loadFont(self, font, size):
         font= ImageFont.truetype(os.environ["USERPROFILE"] + f"\\Sunshine\\Fonts\\{font}.ttf",size)
         return font
+
     def header(self):
         self.cRect((0,0,1000,300), (235,87,31))
         self.loadIMG(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Compass3D.png",-1.7,["c", 20])

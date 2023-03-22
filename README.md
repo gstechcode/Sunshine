@@ -26,6 +26,6 @@
 
 <div>
   <h3 id="versaoaplicativo">
-    <span id="VERSAOAPP">1.0</span>
+    <span id="VERSAOAPP">1.1</span>
   </h3>
 </div>

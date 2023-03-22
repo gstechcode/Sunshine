@@ -15,6 +15,7 @@ class ConvertSTLs:
                 self.temp.title("Sunshine - Conversor de STLs")
                 self.temp.config(bg="orange", padx="100px", pady="30px")
                 self.label= Label(self.temp, text="Pronto para otimizar os STLs?",bg="orange", fg="white", font="Arial 15")
+                self.label.pack(pady="10px")
                 self.btn= Button(self.temp, text="Sim", command= self.rename, bg="green", fg="white", relief="flat", font="Arial 18")
                 self.btn.pack(pady="10px")
                 self.temp.mainloop()
@@ -30,15 +31,15 @@ class ConvertSTLs:
                 self.progress= ttk.Progressbar(self.temp, mode="determinate", orient="horizontal", length= 100)
                 self.progress.pack(pady="10px")
                 try:
-                        os.rename(self.path + "\\5.png",self.path + f"\\05 - Sobreposicao {self.setup} Superior - {self.paciente}.jpg")
+                        os.rename(self.path + "\\5.png",self.path + f"\\05 - Sobreposicao {self.setup} Superior.jpg")
                 except Exception:
                         pass
                 try:
-                        os.rename(self.path + "\\6.png",self.path + f"\\06 - Sobreposicao {self.setup} Inferior - {self.paciente}.jpg")
+                        os.rename(self.path + "\\6.png",self.path + f"\\06 - Sobreposicao {self.setup} Inferior.jpg")
                 except Exception:
                         pass
                 try:
-                        os.rename(self.path + "\\13.pdf",self.path + f"\\13 - Relatorio de {self.setup} - {self.paciente}.pdf")
+                        os.rename(self.path + "\\13.pdf",self.path + f"\\13 - Relatorio de {self.setup}.pdf")
                 except Exception:
                         pass
                 self.renamePart2()
@@ -59,25 +60,25 @@ class ConvertSTLs:
                 script= self.getSTL("15.stl")
                 try:
                         subprocess.call(script, creationflags=DETACHED_PROCESS)
-                        shutil.move(self.localdoc + "\\15.stl", self.path + f"\\15 - Modelo Original Superior - {self.paciente}.stl")
+                        shutil.move(self.localdoc + "\\15.stl", self.path + f"\\15 - Modelo Original Superior.stl")
                 except Exception:
                         pass
                 script= self.getSTL("16.stl")
                 try:
                         subprocess.call(script, creationflags=DETACHED_PROCESS)
-                        shutil.move(self.localdoc + "\\16.stl", self.path + f"\\16 - Modelo Original Inferior - {self.paciente}.stl")
+                        shutil.move(self.localdoc + "\\16.stl", self.path + f"\\16 - Modelo Original Inferior.stl")
                 except Exception:
                         pass
                 script= self.getSTL("17.stl")
                 try:
                         subprocess.call(script, creationflags=DETACHED_PROCESS)
-                        shutil.move(self.localdoc + "\\17.stl", self.path + f"\\17 - Modelo {self.setup} Superior - {self.paciente}.stl")
+                        shutil.move(self.localdoc + "\\17.stl", self.path + f"\\17 - Modelo {self.setup} Superior.stl")
                 except Exception:
                         pass
                 script= self.getSTL("18.stl")
                 try:
                         subprocess.call(script, creationflags=DETACHED_PROCESS)
-                        shutil.move(self.localdoc + "\\18.stl", self.path + f"\\18 - Modelo {self.setup} Inferior - {self.paciente}.stl")
+                        shutil.move(self.localdoc + "\\18.stl", self.path + f"\\18 - Modelo {self.setup} Inferior.stl")
                 except Exception:
                         pass
                 filestozip= []

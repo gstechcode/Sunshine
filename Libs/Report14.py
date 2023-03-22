@@ -22,7 +22,7 @@ class Report14(object):
         self.aux2= ""
         self.pagebreak= 0
         self.height= 842
-        self.pdf= canvas.Canvas(self.path + f"/14 - Relatorio de Instrucoes {self.tsetup} - {self.paciente}.pdf", verbosity= 1, bottomup= 0)
+        self.pdf= canvas.Canvas(self.path + f"/14 - Relatorio de Instrucoes {self.tsetup}.pdf", verbosity= 1, bottomup= 0)
         self.pdf.setPageSize((596,842))
         self.pdf.setTitle("Relatorio de Instrucoes {self.tsetup} - {self.paciente}")
         self.Header()

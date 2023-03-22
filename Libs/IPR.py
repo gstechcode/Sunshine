@@ -19,7 +19,7 @@ class Report:
             self.display= Tk()
             self.display.iconbitmap(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Icon.ico")
             self.display.config(bg="orange",padx="20px",pady="20px")
-            self.display.title("PyReport")
+            self.display.title("Sunshine")
             self.__buildvars__()
             self.__buildBoxes__()
             self.display.mainloop()
@@ -154,7 +154,7 @@ class Report:
         subprocess.run([r"C:\Program Files\Inkscape\bin\inkscape.exe",f"{self.dtemp}\\Model.svg","--export-dpi=300", "--export-background-opacity=1","-o",f"{self.dtemp}\\7.png"])
         while not os.path.exists(f"{self.dtemp}\\7.png"):
             self.display.update()
-        shutil.move(f"{self.dtemp}\\7.png",f'{self.path}\\07 - Relatorio de IPR {self.setup} - {self.paciente}.png')
+        shutil.move(f"{self.dtemp}\\7.png",f'{self.path}\\07 - Relatorio de IPR {self.setup}.png')
         #os.remove(f"{self.imgtemp}\\S.jpg")
         #os.remove(f"{self.imgtemp}\\I.jpg")
         self.display.destroy()

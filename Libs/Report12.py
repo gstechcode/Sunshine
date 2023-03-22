@@ -113,7 +113,7 @@ class Report12:
                 self.Paragraph(texto)
                 self.cRect((0,height-100,width,height),bg=(31,91,141))
                 self.Textc("Consulte as informações completas na Ficha de Instruções",(255,255,255),["c",height-70], 40)
-                self.book.save(self.path + f"\\12 - Resumo de {self.tsetup} - {self.paciente}.png")
+                self.book.save(self.path + f"\\12 - Resumo de {self.tsetup}.png")
         def cRect(self,coords,bg):
                 self.draw.rectangle(coords,fill=bg)
         def openDB(self):

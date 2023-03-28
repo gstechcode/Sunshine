@@ -360,13 +360,17 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.actionCalibration= QAction("Calibração", MainWindow)
         self.actionExport= QAction("Exportar", MainWindow)
         self.actionImport= QAction("Importar", MainWindow)
+        self.versionFile= QAction("Versão", MainWindow)
         actionFile = self.menubar.addMenu("Configurações")
         actionFile.addAction(self.actionCalibration)
         actionFile.addAction(self.actionExport)
         actionFile.addAction(self.actionImport)
+        versionFile = self.menubar.addMenu("Detalhes")
+        versionFile.addAction(self.versionFile)
         self.actionCalibration.triggered.connect(Calibration)
         self.actionExport.triggered.connect(self.Export)
         self.actionImport.triggered.connect(self.Import)
+        self.versionFile.triggered.connect(self.versionApp)
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -377,6 +381,20 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.tabWidget.setCurrentIndex(0)
         self.ortodontista.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+    def versionApp(self):
+        arq= open(os.environ["USERPROFILE"] + "\\Sunshine\\.version","r")
+        versao= arq.readlines()[0]
+        arq.close()
+        display= tk.Tk()
+        display.title("Sunshine - Versão atual")
+        display.geometry("300x250")
+        display.config(bg="orange", padx="30px", pady="30px")
+        display.iconbitmap(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\Icon.ico")
+        label= tk.Label(display, text=f"Sunshine {versao}", fg="white", bg="orange", font="Arial 20")
+        label.pack()
+        btn= tk.Button(display, text="Fechar", relief="flat",bg="green", fg="white", font="Arial 13", command= display.destroy)
+        btn.pack(pady="30px")
+        display.mainloop()
     
     def closeEvent(self,event):
         if(self.modo == "exit"):

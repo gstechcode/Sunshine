@@ -53,7 +53,7 @@ class CaptureView(f.functions):
             else:
                 p.click(600,80)
         if(self.master["sup"] != "0" or self.master["diagnostico"] == True):
-            shutil.copy(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\5.png", self.master["path"] + "\\05 - Sobreposicao " + self.master["setup"] + " Superior - " + self.master["paciente"] + ".png")
+            shutil.copy(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\5.png", self.master["path"] + "\\05 - Sobreposicao " + self.master["setup"] + " Superior.png")
         if(self.master["inf"] != "0" or self.master["diagnostico"] == True):
-            shutil.copy(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\6.png", self.master["path"] + "\\06 - Sobreposicao " + self.master["setup"] + " Inferior - " + self.master["paciente"] + ".png")
+            shutil.copy(os.environ["USERPROFILE"] + "\\Sunshine\\Images\\tmp\\6.png", self.master["path"] + "\\06 - Sobreposicao " + self.master["setup"] + " Inferior.png")
 

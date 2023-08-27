@@ -102,8 +102,8 @@ class Report14(object):
                     self.pdf.setStrokeColorRGB(75/255,172/255,198/255)
                     self.pdf.rect(x,y,width=512,height= 200, fill=1)
                     self.pdf.setFillColorRGB(1/255,64/255,191/255)
-                    self.pdf.setFont("Helvetica-Bold",18)
-                    self.pdf.drawCentredString(552/2,y+30,"   Casos OrthoAligner ONE e PRO")
+                    self.pdf.setFont("Helvetica-Bold",16)
+                    self.pdf.drawCentredString(552/2,y+30,"   Atenção aos casos com Indicação de pacote One e/ou Pro")
                     self.pdf.line(x,y+45,x+512,y+45)
                     self.pdf.setFont("Helvetica",13)
                     txt= "Se o seu tratamento se encaixou em um pacote ONE e PRO, você receberá | somente até a etapa 10, para acompanharmos com você a evolução do caso.||"

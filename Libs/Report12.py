@@ -18,7 +18,7 @@ class Report12:
                 self.calc= 1
                 db= self.openDB()
                 if("Consultor" in db):
-                        height= 2300
+                        height= 2600
                 else:
                         height= 1600
                 width= 1104
@@ -104,7 +104,7 @@ class Report12:
                 db= self.openDB()
 
                 if("Consultor" in db):
-                        texto += """ < <break> Casos OrthoAligner ONE e PRO <break> > <break> Se o seu tratamento se encaixou em um pacote ONE e PRO, você receberá somente até a etapa 12, para acompanharmos com você a evolução do caso , isto porque é um caso de grandes movimentações ortodônticas a serem realizadas, movimentações essas que geram uma distorção no modelo na região cervical. Isso se explica porque a gengiva não acompanha as movimentações realizadas no dente virtualmente. <break> <break> Por conta disso, ao solicitar a continuação do caso após o uso dos primeiros 12 pares de placas, pode ser que seja necessário a realização de um recorte cervical nas próximas placas ou até mesmo o envio de um novo escaneamento. Essa medida é benéfica para boa evolução do caso, pois quando o novo escaneamento é enviado, temos o correto posicionamento do periodonto com o dente, melhorando assim a previsibilidade. O recorte cervical também pode ser indicado pois ele remove a área de retentividade criada, melhora a adaptação e conforto ao paciente. Em algumas situações essa medida pode ser obrigatória e não somente benéfica. < <break> <break> Caso opte pelo recorte cervical, a taxa cobrada pelo serviço deverá ser consultada com o consultor comercial da sua região ({Consultor} - {ConsultorTel}). >"""
+                        texto += """ < <break> Atenção aos casos com Indicação de pacote One e/ou Pro <break> > <break> Se o seu tratamento se encaixou em um pacote ONE e PRO, você receberá somente até a etapa 12, para acompanharmos com você a evolução do caso , isto porque é um caso de grandes movimentações ortodônticas a serem realizadas, movimentações essas que geram uma distorção no modelo na região cervical. Isso se explica porque a gengiva não acompanha as movimentações realizadas no dente virtualmente. <break> <break> Por conta disso, ao solicitar a continuação do caso após o uso dos primeiros 12 pares de placas, pode ser que seja necessário a realização de um recorte cervical nas próximas placas ou até mesmo o envio de um novo escaneamento. Essa medida é benéfica para boa evolução do caso, pois quando o novo escaneamento é enviado, temos o correto posicionamento do periodonto com o dente, melhorando assim a previsibilidade. O recorte cervical também pode ser indicado pois ele remove a área de retentividade criada, melhora a adaptação e conforto ao paciente. Em algumas situações essa medida pode ser obrigatória e não somente benéfica. < <break> <break> Caso opte pelo recorte cervical, a taxa cobrada pelo serviço deverá ser consultada com o consultor comercial da sua região ({Consultor} - {ConsultorTel}). >"""
                 else:
                         db= {}
                         db["Consultor"]= ""

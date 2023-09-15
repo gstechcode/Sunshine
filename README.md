@@ -29,3 +29,8 @@
     <span id="VERSAOAPP">1.1</span>
   </h3>
 </div>
+
+<br><br>
+
+![image](https://github.com/gstechcode/Sunshine/assets/96546023/a1bb6880-60a3-4bed-8f55-ed709aa2cc80)
+
